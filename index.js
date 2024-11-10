@@ -1,12 +1,14 @@
 const express = require("express");
 const axios = require("axios");
 const path = require("path");
+var cors = require("cors");
 
 const app = express();
 const port = 3000;
 
 // Middleware para interpretar JSON no corpo da requisição
 app.use(express.json());
+app.use(cors());
 
 // Função para gerar o conteúdo da aula
 async function generateLessonContent(userMessage) {
