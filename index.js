@@ -131,7 +131,7 @@ async function generateVideo(text) {
 
 // https://api.heygen.com/v1/video_status.get?video_id=a3dc3485a73c463c81d6bee303625259
 
-app.post("generateText", async (req, res) => {
+app.post("/generateText", async (req, res) => {
   try {
     const userMessage = req.body.userMessage;
     if (!userMessage) {
