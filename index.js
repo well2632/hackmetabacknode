@@ -104,7 +104,7 @@ async function generateVideo(text) {
               type: "text",
               input_text: text,
               voice_id: "1f4bad6ff4444fbf8e9671a2b85c9d48",
-              speed: 1.5,
+              speed: 1.1,
             },
           },
         ],
