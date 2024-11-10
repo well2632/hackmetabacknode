@@ -1,5 +1,6 @@
 const express = require("express");
 const axios = require("axios");
+const path = require("path");
 
 const app = express();
 const port = 3000;
@@ -157,17 +158,31 @@ app.post("/generateVideo", async (req, res) => {
     }
 
     // Gera o conteúdo da aula
-    const lessonContent = await generateLessonContent(userMessage);
+    let lessonContent = await generateLessonContent(userMessage);
 
     // Gera o título da aula com base no conteúdo
     const lessonTitle = await generateLessonTitle(lessonContent);
 
-    const video = await generateVideo(lessonContent);
+    let video_id = null;
+    let preload_video = null;
+    let preload = false;
+
+    if (req.body.userMessage.toUpperCase().includes("LHAMA")) {
+      preload_video = "https://hackabase.sfo3.digitaloceanspaces.com/caption%20(2).mp4";
+      lessonContent =
+        "As lhamas são originárias dos Andes da América do Sul e foram domesticadas há cerca de 5.000 anos pelos povos indígenas da região, como os incas. Elas eram indispensáveis para o transporte de cargas nas montanhas, já que suportavam o terreno e o clima locais. Além disso, eram usadas para lã, carne e esterco, que servia de combustível e fertilizante. Na cultura inca, eram vistas como sagradas e oferecidas em sacrifícios religiosos. Hoje, as lhamas continuam presentes na vida andina e são criadas também em outras partes do mundo pela lã e como animais de companhia.";
+      preload = true;
+    } else {
+      video_id = await generateVideo(lessonContent);
+    }
+
+    console.log(video_id);
+    console.log(preload_video);
 
     // Retorna o conteúdo e o título no JSON
-    res.json({ content: lessonContent, title: lessonTitle, video_id: video.data.data.video_id });
+    res.json({ content: lessonContent, title: lessonTitle, video_id: video_id?.data?.data?.video_id, preload_video, preload });
   } catch (error) {
-    // console.log(error);
+    console.log(error);
     res.status(500).send("Erro ao gerar a aula");
   }
 });
